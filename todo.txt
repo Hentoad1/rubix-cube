@@ -1,0 +1,4 @@
+add camera controls.
+make piece rotatable
+create keybinds.
+create customizable keybinds.

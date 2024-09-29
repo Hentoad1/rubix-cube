@@ -1,0 +1,67 @@
+import * as THREE from 'three'
+import React from 'react'
+import { ThreeElements } from '@react-three/fiber'
+
+export enum Face{
+  TOP,
+  BOTTOM,
+  LEFT,
+  RIGHT,
+  BACK,
+  FRONT
+}
+
+
+function FaceToMatName(f: Face){
+  switch(f){
+    case Face.RIGHT:
+      return "material-0";
+    case Face.LEFT:
+      return "material-1";
+    case Face.TOP:
+      return "material-2";
+    case Face.BOTTOM:
+      return "material-3";
+    case Face.FRONT:
+      return "material-4";
+    case Face.BACK:
+      return "material-5";
+  }
+}
+
+export interface FaceColor{
+  color: THREE.Color,
+  face: Face
+}
+
+export interface RubixPartProp{
+  position: THREE.Vector3,
+  colors: Array<FaceColor>
+}
+
+function RubixPart(props: RubixPartProp) {
+
+
+  let meshProps : ThreeElements['mesh'] = { position:[props.position.x, props.position.y, props.position.z] };
+
+  const ref = React.useRef<THREE.Mesh>(null!);
+  return (
+    <mesh ref = {ref} {...meshProps}>
+
+      <boxGeometry args={[1, 1, 1]}/>
+      {props.colors.map(e => <meshStandardMaterial attach={FaceToMatName(e.face)} color={e.color} />)}
+
+      {/*}
+      <meshStandardMaterial attach="material-0" color="#FF00FF" />
+      <meshStandardMaterial attach="material-1" color="#00FFFF" />
+      <meshStandardMaterial attach="material-2" color="#00FF00" />
+      <meshStandardMaterial attach="material-3" color="#FF0000" />
+      <meshStandardMaterial attach="material-4" color="#0000FF" />
+      <meshStandardMaterial attach="material-5" color="#FFFF00" />
+      */}
+
+    </mesh>
+  )
+}
+
+export default RubixPart;

@@ -25,21 +25,28 @@ function CreateRubixCube(){
     let prop : RubixPartProp = {position: new THREE.Vector3(depth * 1.005, layer * 1.005, row * 1.005), colors: []};
 
     if (layer == 1){
-      prop.colors.push({color: new THREE.Color("white"), face: Face.TOP});
+      //white
+      prop.colors.push({color: new THREE.Color("#FFFFFF"), face: Face.TOP});
     } else if (layer == -1){
-      prop.colors.push({color: new THREE.Color("yellow"), face: Face.BOTTOM});
+      //yellow
+      prop.colors.push({color: new THREE.Color("#A0A000"), face: Face.BOTTOM});
     }
 
     if (depth == 1){
-      prop.colors.push({color: new THREE.Color("red"), face: Face.RIGHT});
+      //red
+      prop.colors.push({color: new THREE.Color("#FF0000"), face: Face.RIGHT});
     }else if (depth == -1){
-      prop.colors.push({color: new THREE.Color("orange"), face: Face.LEFT});
+      //prop.colors.push({color: new THREE.Color("#DF6F00"), face: Face.LEFT});
+      //prop.colors.push({color: new THREE.Color("#AA5500"), face: Face.LEFT});
+      prop.colors.push({color: new THREE.Color("#FA5500"), face: Face.LEFT});
     }
 
     if (row == 1){
-      prop.colors.push({color: new THREE.Color("green"), face: Face.FRONT});
+      //green
+      prop.colors.push({color: new THREE.Color("#007F00"), face: Face.FRONT});
     }else if (row == -1){
-      prop.colors.push({color: new THREE.Color("blue"), face: Face.BACK});
+      //blue
+      prop.colors.push({color: new THREE.Color("#0000FF"), face: Face.BACK});
     }
 
     //prop.colors.push({color: i % 2 == 0 ? new THREE.Color("green") : new THREE.Color("purple"), face: Face.FRONT});

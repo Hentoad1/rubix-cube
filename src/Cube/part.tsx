@@ -42,23 +42,18 @@ export interface RubixPartProp{
 function RubixPart(props: RubixPartProp) {
 
 
+  const ref = React.useRef<THREE.Mesh>(null!);
+
+  //useFrame((state, delta) => ref.current.rotation.y += delta);
+
   let meshProps : ThreeElements['mesh'] = { position:[props.position.x, props.position.y, props.position.z] };
 
-  const ref = React.useRef<THREE.Mesh>(null!);
   return (
     <mesh ref = {ref} {...meshProps}>
 
       <boxGeometry args={[1, 1, 1]}/>
-      {props.colors.map(e => <meshStandardMaterial attach={FaceToMatName(e.face)} color={e.color} />)}
 
-      {/*}
-      <meshStandardMaterial attach="material-0" color="#FF00FF" />
-      <meshStandardMaterial attach="material-1" color="#00FFFF" />
-      <meshStandardMaterial attach="material-2" color="#00FF00" />
-      <meshStandardMaterial attach="material-3" color="#FF0000" />
-      <meshStandardMaterial attach="material-4" color="#0000FF" />
-      <meshStandardMaterial attach="material-5" color="#FFFF00" />
-      */}
+      {props.colors.map((e, i) => <meshStandardMaterial key = {i} attach={FaceToMatName(e.face)} color={e.color} />)}
 
     </mesh>
   )

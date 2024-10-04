@@ -36,7 +36,8 @@ export interface FaceColor{
 
 export interface RubixPartProp{
   position: THREE.Vector3,
-  colors: Array<FaceColor>
+  colors: Array<FaceColor>,
+  rotation: THREE.Vector3
 }
 
 function RubixPart(props: RubixPartProp) {
@@ -46,7 +47,7 @@ function RubixPart(props: RubixPartProp) {
 
   //useFrame((state, delta) => ref.current.rotation.y += delta);
 
-  let meshProps : ThreeElements['mesh'] = { position:[props.position.x, props.position.y, props.position.z] };
+  let meshProps : ThreeElements['mesh'] = { position:[props.position.x, props.position.y, props.position.z], rotation:[props.rotation.x, props.rotation.y, props.rotation.z] };
 
   return (
     <mesh ref = {ref} {...meshProps}>

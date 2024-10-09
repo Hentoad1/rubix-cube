@@ -15,7 +15,7 @@ interface RotationState{
 
 
 export interface CameraProps{
-  ROTATION_TIME_S: number,
+  CAM_ROTATION_TIME_S: number,
   CAM_DISTANCE_FROM_CENTER: number,
   CAM_IS_OFFSET: boolean
 }
@@ -34,7 +34,7 @@ function Camera(props: CameraProps) {
     initalOrientation: new THREE.Quaternion(0,0,0),
     endOrientation: new THREE.Quaternion(0,0,0),
     //these vars are set so position is calculated once.
-    elapsed: props.ROTATION_TIME_S,
+    elapsed: props.CAM_ROTATION_TIME_S,
     rotating: true
   };
 
@@ -86,41 +86,15 @@ function Camera(props: CameraProps) {
     }
   }, [rotation, setRotation]);
 
-  /*React.useEffect(() => {
-    const onKeyPress = (event: KeyboardEvent) => {
-      if (event.repeat){
-        return;
-      }
-
-      if (event.code == "z"){
-        let newRotationState : RotationState = {
-          initalOrientation: new THREE.Quaternion().multiplyQuaternions(rotation.currentOrientation, new THREE.Quaternion().setFromEuler(new THREE.Euler(0, degToRad(-90), 0))),
-          currentOrientation: new THREE.Quaternion(),
-          rotatingAgainst: new THREE.Quaternion(),
-          elapsed: 0,
-          rotating: false
-        }
-        
-        setRotation(newRotationState);
-      }
-    };
-      
-    window.addEventListener('keydown', onKeyPress);
-    
-    return () => {
-      window.removeEventListener('keydown', onKeyPress);
-    }
-  }, [rotation, setRotation]);*/
-
   //slerp camera position.
   useFrame((state, delta) => {
     if (rotation.rotating){
 
       rotation.elapsed += delta;
       
-      if (rotation.elapsed > props.ROTATION_TIME_S){
+      if (rotation.elapsed > props.CAM_ROTATION_TIME_S){
 
-        rotation.elapsed = props.ROTATION_TIME_S;
+        rotation.elapsed = props.CAM_ROTATION_TIME_S;
 
         rotation.rotating = false;
       }
@@ -129,11 +103,11 @@ function Camera(props: CameraProps) {
 
       //rotate camera
       if (props.CAM_IS_OFFSET){
-        currentOrientation.slerpQuaternions(rotation.initalOrientation, rotation.endOrientation, rotation.elapsed / props.ROTATION_TIME_S);
+        currentOrientation.slerpQuaternions(rotation.initalOrientation, rotation.endOrientation, rotation.elapsed / props.CAM_ROTATION_TIME_S);
         currentOrientation.multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(degToRad(0), degToRad(30), degToRad(0))));
         currentOrientation.multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(degToRad(-30), degToRad(0), degToRad(0))));
       }else{
-        currentOrientation.slerpQuaternions(rotation.initalOrientation, rotation.endOrientation, rotation.elapsed / props.ROTATION_TIME_S);
+        currentOrientation.slerpQuaternions(rotation.initalOrientation, rotation.endOrientation, rotation.elapsed / props.CAM_ROTATION_TIME_S);
       }
 
       state.camera.rotation.setFromQuaternion(currentOrientation);

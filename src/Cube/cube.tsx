@@ -2,7 +2,10 @@ import React from 'react';
 
 import * as THREE from "three"
 
-import Part from "./part";
+import { useFrame } from '@react-three/fiber'
+
+
+//import Part from "./part";
 import RubixOrientation from './orientation';
 
 
@@ -12,11 +15,15 @@ function Rubix() {
 
   parts.Rotate();
   parts.Rotate(new THREE.Vector3(0, 1, 0));
-  parts.Rotate();
+  //parts.Rotate();
+
+  useFrame((_, delta) => {
+    parts.Update(delta);
+  })
 
   return (
     <React.Fragment>
-      {parts.GetProps().map((e, i) => <Part key = {i} {...e}/>)}
+      {parts.GetElems()}
     </React.Fragment>
   )
 }

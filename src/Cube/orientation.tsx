@@ -5,10 +5,10 @@ import React from 'react';
 import { ThreeElements, useFrame } from '@react-three/fiber'
 import { degToRad } from 'three/src/math/MathUtils';
 
-const PART_SEPERATION_AMOUNT = 0.005;
-const PART_DISTANCE_FROM_CENTER = 1 + PART_SEPERATION_AMOUNT;
-
-const PART_ROTATION_TIME_S = 1
+export interface OrientationConfig {
+  PART_SEPERATION_AMOUNT: number,
+  PART_ROTATION_TIME_S : number
+}
 
 enum Face{
   TOP,
@@ -63,7 +63,9 @@ function FaceToMatName(f: Face){
   }
 }
 
-function CreateDefaultRubixCube(){
+function CreateDefaultRubixCube(config: OrientationConfig){
+  const PART_DISTANCE_FROM_CENTER = 1 + config.PART_SEPERATION_AMOUNT;
+
   let parts = [];
 
   for (let i = 0; i < 27; ++i){
@@ -138,9 +140,12 @@ function CreateDefaultRubixCube(){
 export default class RubixOrientation {
 
   parts: Part[];
+  config: OrientationConfig;
 
-  constructor(){
-    this.parts = CreateDefaultRubixCube();
+  constructor(config: OrientationConfig){
+
+    this.config = config;
+    this.parts = CreateDefaultRubixCube(config);
     
     this.parts.forEach((e, i) => {
       const ref = React.useRef<THREE.Mesh>(null!);
@@ -166,12 +171,15 @@ export default class RubixOrientation {
   }
 
   Update(delta: number){
+
+    const PART_DISTANCE_FROM_CENTER = 1 + this.config.PART_SEPERATION_AMOUNT;
+
     this.parts.forEach(e => {
       if (e.animation.playing){
         
         e.animation.elapsed += delta;
 
-        if (e.animation.elapsed > PART_ROTATION_TIME_S){
+        if (e.animation.elapsed > this.config.PART_ROTATION_TIME_S){
           e.animation = {
             playing:false,
             elapsed:0,
@@ -187,7 +195,7 @@ export default class RubixOrientation {
           }
         }
 
-        let currentRotQuat = new THREE.Quaternion().slerpQuaternions(e.animation.start.rotation, e.animation.end.rotation, e.animation.elapsed / PART_ROTATION_TIME_S);
+        let currentRotQuat = new THREE.Quaternion().slerpQuaternions(e.animation.start.rotation, e.animation.end.rotation, e.animation.elapsed / this.config.PART_ROTATION_TIME_S);
         let currentRotEuler = new THREE.Euler().setFromQuaternion(currentRotQuat);
         
         let currentPos = new THREE.Vector3().copy(e.default_props.position).applyQuaternion(currentRotQuat);
@@ -224,6 +232,7 @@ export default class RubixOrientation {
 
   Rotate(rotationCenter : THREE.Vector3 = new THREE.Vector3(1,0,0), clockwise: boolean = true){
     
+    const PART_DISTANCE_FROM_CENTER = 1 + this.config.PART_SEPERATION_AMOUNT;
 
     this.parts.forEach(e => {
 

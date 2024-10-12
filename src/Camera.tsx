@@ -17,7 +17,9 @@ interface RotationState{
 export interface CameraProps{
   CAM_ROTATION_TIME_S: number,
   CAM_DISTANCE_FROM_CENTER: number,
-  CAM_IS_OFFSET: boolean
+  CAM_IS_OFFSET: boolean,
+  CAM_WAIT_FOR_ROTATE: boolean,
+  UpdateOrientation: Function | undefined
 }
 
   
@@ -28,7 +30,6 @@ function CalculatePositionOffOrientation(orientation : THREE.Quaternion, distanc
 }
 
 function Camera(props: CameraProps) {
-
 
   const initalState : RotationState = {
     initalOrientation: new THREE.Quaternion(0,0,0),
@@ -43,7 +44,7 @@ function Camera(props: CameraProps) {
   function Rotate(dir : THREE.Quaternion){
 
     //might change this later
-    if (rotation.rotating){
+    if (props.CAM_WAIT_FOR_ROTATE && rotation.rotating){
       return;
     }
 
@@ -97,6 +98,10 @@ function Camera(props: CameraProps) {
         rotation.elapsed = props.CAM_ROTATION_TIME_S;
 
         rotation.rotating = false;
+
+        if (props.UpdateOrientation){
+          props.UpdateOrientation(rotation.endOrientation);
+        }
       }
 
       let currentOrientation : THREE.Quaternion = new THREE.Quaternion();

@@ -1,0 +1,26 @@
+.SettingsOpenButton{
+  
+  
+  height: var(--button-size);
+  width: var(--button-size);
+
+  padding:0;
+  border:none;
+  
+  background:transparent;
+
+  position:absolute;
+  left:calc(0% - (var(--button-size)));
+  top:calc(50% - (var(--button-size) / 2));
+}
+
+.SettingsOpenButton > svg{
+  height:100%;
+  width:100%;
+
+  color:var(--menu-button-color);
+
+  /*sets background to circle half of the size, just to fill the arrow portion*/
+  background:radial-gradient(white, 50%, transparent, 50%, transparent);
+  border-radius: 50%;
+}

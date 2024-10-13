@@ -6,6 +6,7 @@ import React from "react";
 
 import Rubix, {RubixProps} from "./Cube/cube";
 import Camera, {CameraProps} from "./Camera";
+import Settings from './Settings/Settings';
 
 const DEFINE_CAM_PROPS : CameraProps = {
   CAM_ROTATION_TIME_S: 1,
@@ -27,19 +28,19 @@ function App() {
 
   let [CamOrientation, setCamOrientation] = React.useState<THREE.Quaternion>(new THREE.Quaternion());
 
-
-
   return (
-    <Canvas>
+    <div id = 'AppContainer'>
+      <Canvas>
+        <ambientLight intensity={Math.PI / 2} />
+        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
+        <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
 
-      <ambientLight intensity={Math.PI / 2} />
-      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
-      <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
+        <Camera {...DEFINE_CAM_PROPS} UpdateOrientation = {setCamOrientation}/>
 
-      <Camera {...DEFINE_CAM_PROPS} UpdateOrientation = {setCamOrientation}/>
-
-      <Rubix {...DEFINE_RUBIX_PROPS} CameraOrientation = {CamOrientation} />
-    </Canvas>
+        <Rubix {...DEFINE_RUBIX_PROPS} CameraOrientation = {CamOrientation} />
+      </Canvas>
+      <Settings/>
+    </div>
   );
 }
 

@@ -1,0 +1,60 @@
+.SettingsMenu{
+
+  /* Vars */
+  --menu-width: 0;
+  --button-size: 2rem;
+
+  --menu-background-color: rgba(31,36,46);
+  --menu-border-color: rgba(23,28,38);
+  --menu-button-color: var(--menu-border-color);
+
+  --menu-text-color: white;
+
+  background:var(--menu-background-color);
+  color:var(--menu-text-color);
+
+  position:absolute;
+  top:0;
+  bottom:0;
+  max-width: fit-content;
+  width:var(--menu-width);
+  right:0;
+
+  transition: width 0.3s ease-in-out;
+
+}
+
+.SettingsMenu.closed{
+  --menu-width: 0;
+}
+
+.SettingsMenu.open{
+  --menu-width: 300px;
+}
+
+.SettingsMenu::before{
+  content: "";
+
+  position:absolute;
+  top:calc(50% - var(--button-size) * 1.5);
+  bottom:calc(50% - var(--button-size) * 1.5);
+  top:0;
+  bottom:0;
+  right:calc(100% - var(--button-size) / 2);
+  width:var(--button-size);
+
+  background:linear-gradient(90deg, var(--menu-border-color), 50%, transparent, 50%, transparent);
+
+  z-index:0;
+}
+
+.SettingsMenuContent{
+
+  height:100%;
+  
+  display:flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  padding:2rem;
+}

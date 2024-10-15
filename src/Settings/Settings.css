@@ -7,6 +7,7 @@
   --menu-background-color: rgba(31,36,46);
   --menu-border-color: rgba(23,28,38);
   --menu-button-color: var(--menu-border-color);
+  --menu-dark-color: rgba(18, 23, 33);
 
   --menu-text-color: white;
 
@@ -16,11 +17,11 @@
   position:absolute;
   top:0;
   bottom:0;
-  max-width: fit-content;
+  max-width:fit-content;
   width:var(--menu-width);
   right:0;
 
-  transition: width 0.3s ease-in-out;
+  transition: width 0.75s ease-in-out;
 
 }
 
@@ -29,7 +30,7 @@
 }
 
 .SettingsMenu.open{
-  --menu-width: 300px;
+  --menu-width: 100%;
 }
 
 .SettingsMenu::before{
@@ -57,4 +58,13 @@
   box-sizing: border-box;
 
   padding:2rem;
+}
+
+.SettingsMenuSubheader{
+  font-size:1.25em;
+}
+
+.SettingsMenuEntry{
+  padding-left: 1em;
+  font-size:1em;
 }

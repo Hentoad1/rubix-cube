@@ -1,0 +1,78 @@
+.SettingsSlider{
+  display:flex;
+  flex-direction: row;
+  gap:0.5em;
+
+  width:min-content;
+  align-items: center;
+}
+
+.SettingsSliderCaption{
+  height:100%;
+}
+
+.SettingsSliderRange{
+  appearance: none;
+
+  height:0.3em;
+
+  background:var(--menu-border-color);
+
+  cursor: pointer;
+}
+
+.SettingsSliderRange::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  background:var(--menu-text-color);
+  width:1em;
+  height:1em;
+  border-radius:100%;
+}
+
+.SettingsSliderRange::-moz-range-thumb{
+  border:none;
+  background:var(--menu-text-color);
+  width:1em;
+  height:1em;
+}
+
+
+.SettingsSliderTextWrapper{
+  background-color:var(--menu-border-color);
+  white-space: nowrap;
+  border-radius: 0.2em;
+
+  transition: all 0.5s ease-in-out;
+  padding-right:0.25em;
+}
+
+.SettingsSliderTextWrapper:focus-within{
+  background-color:var(--menu-dark-color);
+}
+
+.SettingsSliderText{
+  font-size:1.25em;
+  width:2.5em;
+
+  background:transparent;
+  border:none;
+
+  color: inherit;
+
+
+  text-align: right;
+}
+
+.SettingsSliderText::placeholder{
+  opacity: 0.75;
+}
+
+
+.SettingsSliderText:focus{
+  border:none;
+  outline:none;
+}
+
+.SettingsSliderTextUnit{
+  opacity: 0.75;
+}

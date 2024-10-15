@@ -2,6 +2,7 @@ import React from "react";
 
 import "./Settings.css"
 import SettingsButton from "./SettingsButton";
+import Slider from "./SettingsMenuSlider";
 
 
 function Settings() {
@@ -12,7 +13,10 @@ function Settings() {
     <div className = {closed ? 'SettingsMenu closed' : 'SettingsMenu open'}>
       <SettingsButton onClick={setClosed}/>
       <div className = 'SettingsMenuContent'>
-        Settings
+        <div className = 'SettingsMenuSubheader'>
+          Camera
+        </div>
+        <Slider/>
       </div>
     </div>
   );

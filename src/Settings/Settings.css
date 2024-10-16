@@ -4,10 +4,12 @@
   --menu-width: 0;
   --button-size: 2rem;
 
-  --menu-background-color: rgba(31,36,46);
-  --menu-border-color: rgba(23,28,38);
-  --menu-button-color: var(--menu-border-color);
+  --menu-background-color: rgba(36,41,51);
+  --menu-border-color: rgba(31,36,46);
+  --menu-emphasis-color: rgba(23,28,38);
   --menu-dark-color: rgba(18, 23, 33);
+
+  --menu-button-color: var(--menu-border-color);
 
   --menu-text-color: white;
 

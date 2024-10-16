@@ -16,7 +16,7 @@ function Settings() {
         <div className = 'SettingsMenuSubheader'>
           Camera
         </div>
-        <Slider/>
+        <Slider caption = 'caption' unit = 's' min = {2} max = {10} default_value = {7} onInput = {(e: number) => {console.log(e)}}/>
       </div>
     </div>
   );

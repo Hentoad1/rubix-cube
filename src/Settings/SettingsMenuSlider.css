@@ -5,6 +5,17 @@
 
   width:min-content;
   align-items: center;
+
+
+  background:var(--menu-border-color);
+
+  padding-left:0.5em;
+  padding-right:0.25em;
+
+  padding-top:0.25em;
+  padding-bottom:0.25em;
+
+  border-radius: 0.2em;
 }
 
 .SettingsSliderCaption{
@@ -16,7 +27,7 @@
 
   height:0.3em;
 
-  background:var(--menu-border-color);
+  background:var(--menu-emphasis-color);
 
   cursor: pointer;
 }
@@ -38,16 +49,19 @@
 
 
 .SettingsSliderTextWrapper{
-  background-color:var(--menu-border-color);
+  background-color:var(--menu-emphasis-color);
   white-space: nowrap;
   border-radius: 0.2em;
 
   transition: all 0.5s ease-in-out;
   padding-right:0.25em;
+
+  
+  position:relative;
 }
 
 .SettingsSliderTextWrapper:focus-within{
-  background-color:var(--menu-dark-color);
+  background-color:var(--menu-border-color);
 }
 
 .SettingsSliderText{
@@ -61,6 +75,8 @@
 
 
   text-align: right;
+
+  padding-right:0.4em;
 }
 
 .SettingsSliderText::placeholder{
@@ -75,4 +91,12 @@
 
 .SettingsSliderTextUnit{
   opacity: 0.75;
+  user-select: none;
+  pointer-events: none;
+
+  position:absolute;
+  right:0;
+  bottom:0.05em;
+
+  margin-right:0.25em;
 }

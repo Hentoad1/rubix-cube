@@ -25,10 +25,11 @@
 .SettingsSliderRange{
   appearance: none;
 
-  height:0.3em;
+  /*height is 1 em, but the background is a linear gradient that is only ~0.25em thick. This is so that the slider is easier to click on.*/
+  height:1.5em;
 
-  background:var(--menu-emphasis-color);
-
+  background:linear-gradient(0deg, transparent 0%, transparent 42%, var(--menu-emphasis-color) 42%, var(--menu-emphasis-color) 58%,transparent 58%,transparent 100%);
+  
   cursor: pointer;
 }
 

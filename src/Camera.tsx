@@ -41,7 +41,7 @@ function Camera(props: CameraProps) {
 
   let [rotation, setRotation] = React.useState(initalState);
 
-  function Rotate(dir : THREE.Quaternion){
+  /*let Rotate = React.useCallback((dir : THREE.Quaternion) => {
 
     //might change this later
     if (props.CAM_WAIT_FOR_ROTATE && rotation.rotating){
@@ -56,9 +56,27 @@ function Camera(props: CameraProps) {
     }
     
     setRotation(newRotationState);
-  }
+  }, [props.CAM_WAIT_FOR_ROTATE]);*/
 
   React.useEffect(() => {
+
+    let Rotate = (dir : THREE.Quaternion) => {
+
+      //might change this later
+      if (props.CAM_WAIT_FOR_ROTATE && rotation.rotating){
+        return;
+      }
+  
+      let newRotationState : RotationState = {
+        initalOrientation: rotation.endOrientation,
+        endOrientation: new THREE.Quaternion().multiplyQuaternions(rotation.endOrientation, dir),
+        elapsed: 0,
+        rotating: true
+      }
+      
+      setRotation(newRotationState);
+    };
+    
     const onKeyPress = (event: KeyboardEvent) => {
       if (event.repeat){
         return;
@@ -85,7 +103,18 @@ function Camera(props: CameraProps) {
     return () => {
       window.removeEventListener('keydown', onKeyPress);
     }
-  }, [rotation, setRotation]);
+  }, [rotation, setRotation, props.CAM_WAIT_FOR_ROTATE]);
+
+  React.useEffect(() => {
+    if (!rotation.rotating){
+      rotation = {
+        rotating: true,
+        elapsed: props.CAM_ROTATION_TIME_S,
+        initalOrientation: rotation.endOrientation,
+        endOrientation: rotation.endOrientation,
+      }
+    }
+  }, [props])
 
   //slerp camera position.
   useFrame((state, delta) => {

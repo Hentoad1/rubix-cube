@@ -6,6 +6,7 @@ import "./SettingsMenuSlider.css"
 interface RangeProps{
   min: number,
   max: number,
+  step?: number,
   value: number,
   onInputStart: (n: number) => void
   onInputEnd: (n: number) => void
@@ -23,7 +24,7 @@ function RangeInput(props: RangeProps){
   }, [setValue]);
 
   return (
-    <input type = 'range' className = "SettingsSliderRange" min = {props.min} max = {props.max} value = {props.value} onChange = {onInput}/>
+    <input type = 'range' className = "SettingsSliderRange" min = {props.min} max = {props.max} step = {props.step || 1} value = {props.value} onChange = {onInput}/>
   )
 }
 
@@ -48,8 +49,20 @@ function TextInput(props: TextProps){
     e.preventDefault();
     
     if (e.key == "Enter"){
-      let newValue = parseInt(e.currentTarget.value);
 
+      if (e.currentTarget.value.length === 0){
+        return;
+      }
+
+      let newValue;
+      if (e.currentTarget.value.includes(".")){
+        newValue = parseFloat(e.currentTarget.value);
+        if (isNaN(newValue)){
+          newValue = 0;
+        }
+      }else{
+        newValue = parseInt(e.currentTarget.value);
+      }
       if (newValue > props.max){
         newValue = props.max;
       }else if (newValue < props.min){
@@ -67,7 +80,7 @@ function TextInput(props: TextProps){
     e.stopPropagation();
 
 
-    let matched = e.target.value.match(new RegExp(/[0-9]*/g))?.join("");
+    let matched = e.target.value.match(new RegExp(/[0-9.]*/g))?.join("");
     e.target.value = matched ? matched : "";
   }, [])
 
@@ -86,6 +99,7 @@ export interface SettingsMenuSliderProps{
   unit?: string,
   min: number,
   max: number,
+  step?: number
   default_value: number,
   onInput?: any
 }
@@ -97,7 +111,7 @@ function SettingsMenuSlider(props: SettingsMenuSliderProps) {
   return (
     <div className = "SettingsSlider">
         <label className = "SettingsSliderCaption">
-          Caption
+          {props.caption}
         </label>
         <RangeInput {...props} value = {value} onInputStart = {useValue} onInputEnd = {props.onInput}/>
         <TextInput {...props} value = {value} onInputStart = {useValue} onInputEnd = {props.onInput}/>

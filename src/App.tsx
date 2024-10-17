@@ -4,11 +4,29 @@ import { Canvas } from '@react-three/fiber'
 import * as THREE from "three"
 import React from "react";
 
-import Rubix, {RubixProps} from "./Cube/cube";
-import Camera, {CameraProps} from "./Camera";
-import Settings from './Settings/Settings';
+import Rubix from "./Cube/cube";
+import Camera from "./Camera";
+import Settings, {SettingsConfig} from './Settings/Settings';
 
-const DEFINE_CAM_PROPS : CameraProps = {
+
+const DEFAULT_PROPS : SettingsConfig = {
+  cameraProps: {
+    CAM_ROTATION_TIME_S: 1,
+    CAM_DISTANCE_FROM_CENTER: 5,
+    CAM_IS_OFFSET: true,
+    CAM_WAIT_FOR_ROTATE: true,
+    UpdateOrientation: undefined
+  },
+  rubixProps: {
+    CameraOrientation: new THREE.Quaternion(),
+    Config:{ 
+      PART_SEPERATION_AMOUNT: 0.005,
+      PART_ROTATION_TIME_S : 0.1
+    }
+  }
+}
+
+/*const DEFINE_CAM_PROPS : CameraProps = {
   CAM_ROTATION_TIME_S: 1,
   CAM_DISTANCE_FROM_CENTER: 5,
   CAM_IS_OFFSET: true,
@@ -22,11 +40,18 @@ const DEFINE_RUBIX_PROPS : RubixProps = {
     PART_SEPERATION_AMOUNT: 0.005,
     PART_ROTATION_TIME_S : 0.1
   }
-}
+}*/
 
 function App() {
 
   let [CamOrientation, setCamOrientation] = React.useState<THREE.Quaternion>(new THREE.Quaternion());
+
+  let [SettingsConfig, setSettingsConfig] = React.useState<SettingsConfig>(DEFAULT_PROPS);
+
+  React.useEffect(() => {
+    console.log(SettingsConfig);
+  }, [SettingsConfig])
+  
 
   return (
     <div id = 'AppContainer'>
@@ -35,11 +60,11 @@ function App() {
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
         <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
 
-        <Camera {...DEFINE_CAM_PROPS} UpdateOrientation = {setCamOrientation}/>
+        <Camera {...SettingsConfig.cameraProps} UpdateOrientation = {setCamOrientation}/>
 
-        <Rubix {...DEFINE_RUBIX_PROPS} CameraOrientation = {CamOrientation} />
+        <Rubix {...SettingsConfig.rubixProps} CameraOrientation = {CamOrientation} />
       </Canvas>
-      <Settings/>
+      <Settings Settings = {SettingsConfig} UpdateSettings = {setSettingsConfig}/>
     </div>
   );
 }

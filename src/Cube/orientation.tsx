@@ -64,8 +64,6 @@ function FaceToMatName(f: Face){
 }
 
 function CreateDefaultRubixCube(config: OrientationConfig){
-  const PART_DISTANCE_FROM_CENTER = 1 + config.PART_SEPERATION_AMOUNT;
-
   let parts = [];
 
   for (let i = 0; i < 27; ++i){
@@ -87,7 +85,7 @@ function CreateDefaultRubixCube(config: OrientationConfig){
     let data : Part = 
     {
       default_props:{
-        position: new THREE.Vector3(depth * PART_DISTANCE_FROM_CENTER, layer * PART_DISTANCE_FROM_CENTER, row * PART_DISTANCE_FROM_CENTER),
+        position: new THREE.Vector3(depth, layer, row),
         rotation: new THREE.Quaternion()
       },
       faces: [],
@@ -97,11 +95,11 @@ function CreateDefaultRubixCube(config: OrientationConfig){
         needsUpdate: false,
         start:{
           rotation: new THREE.Quaternion(),
-          position: new THREE.Vector3(depth * PART_DISTANCE_FROM_CENTER, layer * PART_DISTANCE_FROM_CENTER, row * PART_DISTANCE_FROM_CENTER)
+          position: new THREE.Vector3(depth, layer, row)
         },
         end:{
           rotation: new THREE.Quaternion(),
-          position: new THREE.Vector3(depth * PART_DISTANCE_FROM_CENTER, layer * PART_DISTANCE_FROM_CENTER, row * PART_DISTANCE_FROM_CENTER)
+          position: new THREE.Vector3(depth, layer, row)
         }
       }
     };
@@ -137,6 +135,10 @@ function CreateDefaultRubixCube(config: OrientationConfig){
   return parts;
 }
 
+function calculatePosWithSeperation(pos: THREE.Vector3, scalar: number){
+  return new THREE.Vector3().copy(pos).multiplyScalar(scalar);
+}
+
 export default class RubixOrientation {
 
   parts: Part[];
@@ -146,13 +148,13 @@ export default class RubixOrientation {
 
     this.config = config;
     this.parts = CreateDefaultRubixCube(config);
-    
+
     this.parts.forEach((e, i) => {
       const ref = React.useRef<THREE.Mesh>(null!);
 
       e.ref = ref;
 
-      let meshProps : ThreeElements['mesh'] = { position:e.default_props.position, rotation:new THREE.Euler().setFromQuaternion(e.default_props.rotation) };
+      let meshProps : ThreeElements['mesh'] = { position:calculatePosWithSeperation(e.default_props.position, config.PART_SEPERATION_AMOUNT + 1), rotation:new THREE.Euler().setFromQuaternion(e.default_props.rotation) };
 
       e.elem = (
         <mesh ref = {ref} key = {i} {...meshProps}>
@@ -166,6 +168,11 @@ export default class RubixOrientation {
     });
   }
 
+  UpdateConfig(config: OrientationConfig){
+    this.config = config;
+    this.parts.forEach(e => e.animation.needsUpdate = true);
+  }
+  
   GetElems(){
     return this.parts.map(e => e.elem);
   }
@@ -198,7 +205,7 @@ export default class RubixOrientation {
         let currentRotQuat = new THREE.Quaternion().slerpQuaternions(e.animation.start.rotation, e.animation.end.rotation, e.animation.elapsed / this.config.PART_ROTATION_TIME_S);
         let currentRotEuler = new THREE.Euler().setFromQuaternion(currentRotQuat);
         
-        let currentPos = new THREE.Vector3().copy(e.default_props.position).applyQuaternion(currentRotQuat);
+        let currentPos = new THREE.Vector3().copy(e.default_props.position).applyQuaternion(currentRotQuat).multiplyScalar(PART_DISTANCE_FROM_CENTER);
 
         if (e.ref){
           e.ref.current.position.x = currentPos.x;
@@ -214,9 +221,11 @@ export default class RubixOrientation {
       //note: !e.animation.playing isnt the same as using and else because the var can be changed in the if statement.
       if (!e.animation.playing && e.animation.needsUpdate){
         if (e.ref){
-          e.ref.current.position.x = e.animation.end.position.x;
-          e.ref.current.position.y = e.animation.end.position.y;
-          e.ref.current.position.z = e.animation.end.position.z;
+          let scaledPos = calculatePosWithSeperation(e.animation.end.position, PART_DISTANCE_FROM_CENTER);
+
+          e.ref.current.position.x = scaledPos.x;
+          e.ref.current.position.y = scaledPos.y;
+          e.ref.current.position.z = scaledPos.z;
 
           let endRotEuler = new THREE.Euler().setFromQuaternion(e.animation.end.rotation);
           
@@ -231,9 +240,6 @@ export default class RubixOrientation {
   }
 
   Rotate(rotationCenter : THREE.Vector3 = new THREE.Vector3(1,0,0), clockwise: boolean = true){
-    
-    const PART_DISTANCE_FROM_CENTER = 1 + this.config.PART_SEPERATION_AMOUNT;
-
     this.parts.forEach(e => {
 
       let startRot : THREE.Quaternion = e.animation.end.rotation;
@@ -245,7 +251,7 @@ export default class RubixOrientation {
       let isRotating : boolean = false;
 
       //x rotation
-      if (rotationCenter.x != 0 && startPos.x == rotationCenter.x * PART_DISTANCE_FROM_CENTER){
+      if (rotationCenter.x != 0 && startPos.x == rotationCenter.x){
 
         isRotating = true;
         
@@ -299,7 +305,7 @@ export default class RubixOrientation {
       }
 
       //y rotation
-      if (rotationCenter.y != 0 && startPos.y == rotationCenter.y * PART_DISTANCE_FROM_CENTER){
+      if (rotationCenter.y != 0 && startPos.y == rotationCenter.y){
 
         isRotating = true;
 
@@ -357,7 +363,7 @@ export default class RubixOrientation {
       }
 
       //z rotation
-      if (rotationCenter.z != 0 && startPos.z == rotationCenter.z * PART_DISTANCE_FROM_CENTER){
+      if (rotationCenter.z != 0 && startPos.z == rotationCenter.z){
 
         isRotating = true;
 

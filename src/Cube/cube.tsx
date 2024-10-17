@@ -22,8 +22,6 @@ function Rubix(props: RubixProps) {
     parts.current.Update(delta);
   })
 
-  
-
   React.useEffect(() => {
 
     const Rotate = (dir: THREE.Vector3, clockwise: boolean) => {
@@ -71,6 +69,10 @@ function Rubix(props: RubixProps) {
       window.removeEventListener('keydown', onKeyPress);
     }
   }, [parts, props.CameraOrientation]);
+
+  React.useEffect(() => {
+    parts.current.UpdateConfig(props.Config);
+  }, [props.Config])
 
   return (
     <React.Fragment>

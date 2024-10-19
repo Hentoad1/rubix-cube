@@ -1,0 +1,38 @@
+.SettingsControlListing{
+  appearance: none;
+  border:none;
+  color:inherit;
+  font:inherit;
+  
+  display:flex;
+  flex-direction: row;
+
+
+  align-items: center;
+  justify-content: space-between;
+
+
+  background:var(--menu-border-color);
+
+  padding-left:1em;
+  padding-right:1em;
+
+  padding-top:0.25em;
+  padding-bottom:0.25em;
+
+  border-radius: 0.2em;
+
+  margin-top:0.25em;
+  margin-bottom:0.25em;
+
+  cursor: pointer;
+
+}
+
+.SettingsControlListingCaption{
+  
+}
+
+.SettingsControlListingKey{
+  
+}

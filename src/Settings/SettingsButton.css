@@ -1,26 +1,32 @@
-.SettingsOpenButton{
+.SettingsButton{
+  appearance: none;
   
-  
-  height: var(--button-size);
-  width: var(--button-size);
-
-  padding:0;
   border:none;
-  
-  background:transparent;
+  margin:0;
+  color:inherit;
+  font:inherit;
 
-  position:absolute;
-  left:calc(0% - (var(--button-size)));
-  top:calc(50% - (var(--button-size) / 2));
+  text-align: center;
+
+  background:var(--menu-border-color);
+
+  padding-left:0.5em;
+  padding-right:0.25em;
+
+  padding-top:0.25em;
+  padding-bottom:0.25em;
+
+  border-radius: 0.25em;
+
+  cursor: pointer;
+
+  transition: background-color 0.2s ease-in-out;
 }
 
-.SettingsOpenButton > svg{
-  height:100%;
-  width:100%;
+.SettingsButton:hover{
+  background:var(--menu-accent-color);
+}
 
-  color:var(--menu-button-color);
-
-  /*sets background to circle half of the size, just to fill the arrow portion*/
-  background:radial-gradient(white, 50%, transparent, 50%, transparent);
-  border-radius: 50%;
+.SettingsButton:active{
+  background:var(--menu-accent-color-dark);
 }

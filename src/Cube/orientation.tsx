@@ -177,6 +177,48 @@ export default class RubixOrientation {
     return this.parts.map(e => e.elem);
   }
 
+  Reset(){ 
+    this.parts.forEach(e => {
+      e.animation = {
+        playing: false,
+        elapsed: 0,
+        needsUpdate: true,
+        start:{
+          rotation: e.default_props.rotation,
+          position: e.default_props.position
+        },
+        end:{
+          rotation: e.default_props.rotation,
+          position: e.default_props.position
+        }
+      }
+    });
+  }
+
+  Scramble(){ 
+    this.Reset();
+    
+    for (let i = 0; i < 20; ++i){
+      
+      const Faces = [
+        new THREE.Vector3(1, 0, 0),
+        new THREE.Vector3(-1, 0, 0),
+        new THREE.Vector3(0, 1, 0),
+        new THREE.Vector3(0, -1, 0),
+        new THREE.Vector3(0, 0, 1),
+        new THREE.Vector3(0, 0, -1),
+      ];
+
+      let RandomFace = Faces[Math.floor(Math.random() * 6)];
+      let isClockWise = Math.random() > 0.5;
+      
+      this.Rotate(RandomFace, isClockWise)
+    }
+
+    //flushes animation
+    this.Update(this.config.PART_ROTATION_TIME_S);
+  }
+
   Update(delta: number){
 
     const PART_DISTANCE_FROM_CENTER = 1 + this.config.PART_SEPERATION_AMOUNT;

@@ -4,7 +4,7 @@ import { Canvas } from '@react-three/fiber'
 import * as THREE from "three"
 import React from "react";
 
-import Rubix from "./Cube/cube";
+import Rubix, {RubixHandle} from "./Cube/cube";
 import Camera from "./Camera";
 import Settings, {SettingsConfig} from './Settings/Settings';
 
@@ -51,7 +51,16 @@ function App() {
   React.useEffect(() => {
     console.log(SettingsConfig);
   }, [SettingsConfig])
-  
+
+  let cubeRef = React.useRef<RubixHandle>(null);
+
+  let ScrambleCube = React.useCallback(() => {
+    cubeRef?.current?.Scramble();
+  }, []);
+
+  let ResetCube = React.useCallback(() => {
+    cubeRef?.current?.Reset();
+  }, []);
 
   return (
     <div id = 'AppContainer'>
@@ -62,9 +71,9 @@ function App() {
 
         <Camera {...SettingsConfig.cameraProps} UpdateOrientation = {setCamOrientation}/>
 
-        <Rubix {...SettingsConfig.rubixProps} CameraOrientation = {CamOrientation} />
+        <Rubix ref = {cubeRef} {...SettingsConfig.rubixProps} CameraOrientation = {CamOrientation} />
       </Canvas>
-      <Settings Settings = {SettingsConfig} UpdateSettings = {setSettingsConfig}/>
+      <Settings Settings = {SettingsConfig} UpdateSettings = {setSettingsConfig} ButtonFunctions = {{Scramble: ScrambleCube, Reset: ResetCube}}/>
     </div>
   );
 }

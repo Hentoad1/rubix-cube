@@ -11,12 +11,25 @@ export interface RubixProps {
   Config: OrientationConfig
 }
 
+export type RubixHandle = {
+  Scramble: () => void,
+  Reset: () => void,
+};
 
-function Rubix(props: RubixProps) {
+const Rubix = React.forwardRef<RubixHandle, RubixProps>((props, ref) => {
 
   //let p = React.useRef();
 
   let parts = React.useRef(new RubixOrientation(props.Config));
+
+  React.useImperativeHandle(ref, () => ({
+    Reset(){
+      parts.current.Reset();
+    },
+    Scramble(){
+      parts.current.Scramble();
+    }
+  }));
 
   useFrame((_, delta) => {
     parts.current.Update(delta);
@@ -79,7 +92,7 @@ function Rubix(props: RubixProps) {
       {parts.current.GetElems()}
     </React.Fragment>
   )
-}
+})
 
 
 export default Rubix;

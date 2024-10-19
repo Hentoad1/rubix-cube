@@ -1,22 +1,28 @@
 import React from "react";
 
 import "./Settings.css"
-import SettingsButton from "./SettingsButton";
+import SettingsButton from "./SettingsOpenButton";
 import Slider from "./SettingsMenuSlider";
 import Checkbox from "./SettingsCheckbox"
+import Button from "./SettingsButton"
+import Controls from "./SettingsControlListing"
 import {RubixProps} from "../Cube/cube";
 import {CameraProps} from "../Camera";
 
 export interface SettingsConfig {
   cameraProps: CameraProps,
-  rubixProps: RubixProps
+  rubixProps: RubixProps,
 }
 
-
+interface SettingsButtonFunctions {
+  Scramble: () => void,
+  Reset:() => void
+}
 
 interface SettingsProps {
   Settings: SettingsConfig,
   UpdateSettings: (v : SettingsConfig) => void
+  ButtonFunctions: SettingsButtonFunctions
 }
 
 function Settings(props: SettingsProps) {
@@ -83,6 +89,29 @@ function Settings(props: SettingsProps) {
           default_value = {props.Settings.rubixProps.Config.PART_SEPERATION_AMOUNT}
           onInput = {(v: number) => props.UpdateSettings({...props.Settings, rubixProps:{...props.Settings.rubixProps, Config: {...props.Settings.rubixProps.Config, PART_SEPERATION_AMOUNT: v}}})}
         />
+
+
+        <label className = 'SettingsMenuSubheader'>
+          Controls
+        </label>
+
+        <Controls caption = "a"/>
+
+        <label className = 'SettingsMenuSubheader'>
+        </label>
+
+        <div className = "SettingsRow">
+          <Button
+            text = 'Reset Cube'
+            onClick = {props.ButtonFunctions.Reset}
+          />
+          <Button
+            text = 'Scramble Cube'
+            onClick = {props.ButtonFunctions.Scramble}
+          />
+        </div>
+
+
 
       </div>
     </div>

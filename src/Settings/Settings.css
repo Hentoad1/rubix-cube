@@ -61,7 +61,10 @@
   flex-direction: column;
   box-sizing: border-box;
   
+  overflow-y:scroll;
   
+  gap:0.5em;
+
   padding:2rem;
 }
 
@@ -86,6 +89,9 @@
   width:100%;
 
   gap:1em;
+
+  margin:0;
+  
 }
 
 .SettingsRow > *{

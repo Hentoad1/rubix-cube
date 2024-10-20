@@ -1,4 +1,4 @@
-.SettingsControlListing{
+  .SettingsControlListing{
   appearance: none;
   border:none;
   color:inherit;
@@ -11,28 +11,41 @@
   align-items: center;
   justify-content: space-between;
 
-
   background:var(--menu-border-color);
 
-  padding-left:1em;
+  border-radius: 0.2em;
+  margin:0;
+  padding:0;
+  /*padding-left:1em;
   padding-right:1em;
 
   padding-top:0.25em;
   padding-bottom:0.25em;
 
-  border-radius: 0.2em;
 
   margin-top:0.25em;
-  margin-bottom:0.25em;
+  margin-bottom:0.25em;*/
 
   cursor: pointer;
+}
 
+.SettingsControlListingNotifcation{
+  width:100%;
+  text-align: center;
+
+  padding:0.5em;
 }
 
 .SettingsControlListingCaption{
-  
+  padding:0.5em;
+  pointer-events: none;
 }
 
 .SettingsControlListingKey{
+  min-width:10em;
+
+  padding:0.5em;
+  background:var(--menu-dark-color);
   
+  border-radius: 0 0.2em 0.2em 0;
 }

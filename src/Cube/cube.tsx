@@ -5,10 +5,28 @@ import * as THREE from "three"
 import { useFrame } from '@react-three/fiber'
 
 import RubixOrientation, {OrientationConfig} from './orientation';
+import { Keybind } from '../Settings/Settings';
+
+interface RubixKeybinds {
+  ShiftToInvert: boolean,
+  ROTATE_TOP_C: Keybind,
+  ROTATE_TOP_CC: Keybind,
+  ROTATE_BOTTOM_C: Keybind,
+  ROTATE_BOTTOM_CC: Keybind,
+  ROTATE_LEFT_C: Keybind,
+  ROTATE_LEFT_CC: Keybind,
+  ROTATE_RIGHT_C: Keybind,
+  ROTATE_RIGHT_CC: Keybind,
+  ROTATE_FRONT_C: Keybind,
+  ROTATE_FRONT_CC: Keybind,
+  ROTATE_BACK_C: Keybind,
+  ROTATE_BACK_CC: Keybind,
+}
 
 export interface RubixProps {
   CameraOrientation: THREE.Quaternion
   Config: OrientationConfig
+  Keybinds: RubixKeybinds
 }
 
 export type RubixHandle = {
@@ -17,8 +35,6 @@ export type RubixHandle = {
 };
 
 const Rubix = React.forwardRef<RubixHandle, RubixProps>((props, ref) => {
-
-  //let p = React.useRef();
 
   let parts = React.useRef(new RubixOrientation(props.Config));
 
@@ -47,33 +63,93 @@ const Rubix = React.forwardRef<RubixHandle, RubixProps>((props, ref) => {
       if (event.repeat){
         return;
       }
-      
-      switch (event.code){
 
-        case "KeyA":
-        Rotate(new THREE.Vector3(-1, 0, 0), event.shiftKey);
-        break;
+      console.log(props.Keybinds.ShiftToInvert);
+      console.log(event.shiftKey);
+      console.log(event.key);
+      console.log(props.Keybinds);
 
-        case "KeyD":
-        Rotate(new THREE.Vector3(1, 0, 0), event.shiftKey);
-        break;
+      if (props.Keybinds.ShiftToInvert){
+        switch (event.code){
 
-        case "KeyW":
-        Rotate(new THREE.Vector3(0, 1, 0), event.shiftKey);
-        break;
+          case props.Keybinds.ROTATE_LEFT_C.code:
+          Rotate(new THREE.Vector3(-1, 0, 0), !event.shiftKey);
+          break;
+  
+          case props.Keybinds.ROTATE_RIGHT_C.code:
+          Rotate(new THREE.Vector3(1, 0, 0), !event.shiftKey);
+          break;
+  
+          case props.Keybinds.ROTATE_TOP_C.code:
+          Rotate(new THREE.Vector3(0, 1, 0), !event.shiftKey);
+          break;
+  
+          case props.Keybinds.ROTATE_BOTTOM_C.code:
+          Rotate(new THREE.Vector3(0, -1, 0), !event.shiftKey);
+          break;
+  
+          case props.Keybinds.ROTATE_FRONT_C.code:
+          Rotate(new THREE.Vector3(0, 0, 1), !event.shiftKey);
+          break;
+  
+          case props.Keybinds.ROTATE_BACK_C.code:
+          Rotate(new THREE.Vector3(0, 0, -1), !event.shiftKey);
+          break;
+        }
+      }else{
+        switch (event.code){
 
-        case "KeyS":
-        Rotate(new THREE.Vector3(0, -1, 0), event.shiftKey);
-        break;
+          case props.Keybinds.ROTATE_LEFT_C.code:
+          Rotate(new THREE.Vector3(-1, 0, 0), true);
+          break;
 
-        case "KeyQ":
-        Rotate(new THREE.Vector3(0, 0, 1), event.shiftKey);
-        break;
-
-        case "KeyE":
-        Rotate(new THREE.Vector3(0, 0, -1), event.shiftKey);
-        break;
+          case props.Keybinds.ROTATE_LEFT_CC.code:
+          Rotate(new THREE.Vector3(-1, 0, 0), false);
+          break;
+  
+          case props.Keybinds.ROTATE_RIGHT_C.code:
+          Rotate(new THREE.Vector3(1, 0, 0), true);
+          break;
+  
+          case props.Keybinds.ROTATE_RIGHT_CC.code:
+          Rotate(new THREE.Vector3(1, 0, 0), false);
+          break;
+  
+          case props.Keybinds.ROTATE_TOP_C.code:
+          Rotate(new THREE.Vector3(0, 1, 0), true);
+          break;
+  
+          case props.Keybinds.ROTATE_TOP_CC.code:
+          Rotate(new THREE.Vector3(0, 1, 0), false);
+          break;
+  
+          case props.Keybinds.ROTATE_BOTTOM_C.code:
+          Rotate(new THREE.Vector3(0, -1, 0), true);
+          break;
+  
+          case props.Keybinds.ROTATE_BOTTOM_CC.code:
+          Rotate(new THREE.Vector3(0, -1, 0), false);
+          break;
+  
+          case props.Keybinds.ROTATE_FRONT_C.code:
+          Rotate(new THREE.Vector3(0, 0, 1), true);
+          break;
+  
+          case props.Keybinds.ROTATE_FRONT_CC.code:
+          Rotate(new THREE.Vector3(0, 0, 1), false);
+          break;
+  
+          case props.Keybinds.ROTATE_BACK_C.code:
+          Rotate(new THREE.Vector3(0, 0, -1), true);
+          break;
+  
+          case props.Keybinds.ROTATE_BACK_CC.code:
+          Rotate(new THREE.Vector3(0, 0, -1), false);
+          break;
+        }
       }
+
+      
     };
       
     window.addEventListener('keydown', onKeyPress);
@@ -81,7 +157,7 @@ const Rubix = React.forwardRef<RubixHandle, RubixProps>((props, ref) => {
     return () => {
       window.removeEventListener('keydown', onKeyPress);
     }
-  }, [parts, props.CameraOrientation]);
+  }, [parts, props.CameraOrientation, props.Keybinds]);
 
   React.useEffect(() => {
     parts.current.UpdateConfig(props.Config);

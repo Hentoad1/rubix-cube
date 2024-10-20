@@ -2,6 +2,7 @@ import * as THREE from "three"
 import React from "react";
 import { useFrame } from '@react-three/fiber';
 import { degToRad } from "three/src/math/MathUtils";
+import { Keybind } from "./Settings/Settings";
 
 
 
@@ -13,6 +14,12 @@ interface RotationState{
   rotating: boolean
 }
 
+export interface CameraKeybinds{
+  CAMERA_ROTATE_UP: Keybind,
+  CAMERA_ROTATE_DOWN: Keybind,
+  CAMERA_ROTATE_LEFT: Keybind,
+  CAMERA_ROTATE_RIGHT: Keybind
+}
 
 export interface CameraProps{
   CAM_ROTATION_TIME_S: number,
@@ -20,6 +27,7 @@ export interface CameraProps{
   CAM_IS_OFFSET: boolean,
   CAM_WAIT_FOR_ROTATE: boolean,
   UpdateOrientation: Function | undefined
+  Keybinds: CameraKeybinds
 }
 
   
@@ -40,23 +48,6 @@ function Camera(props: CameraProps) {
   };
 
   let [rotation, setRotation] = React.useState(initalState);
-
-  /*let Rotate = React.useCallback((dir : THREE.Quaternion) => {
-
-    //might change this later
-    if (props.CAM_WAIT_FOR_ROTATE && rotation.rotating){
-      return;
-    }
-
-    let newRotationState : RotationState = {
-      initalOrientation: rotation.endOrientation,
-      endOrientation: new THREE.Quaternion().multiplyQuaternions(rotation.endOrientation, dir),
-      elapsed: 0,
-      rotating: true
-    }
-    
-    setRotation(newRotationState);
-  }, [props.CAM_WAIT_FOR_ROTATE]);*/
 
   React.useEffect(() => {
 
@@ -82,17 +73,19 @@ function Camera(props: CameraProps) {
         return;
       }
 
+      console.log(props.Keybinds);
+
       switch (event.code){
-        case "ArrowUp":
+        case props.Keybinds.CAMERA_ROTATE_UP.code:
         Rotate(new THREE.Quaternion().setFromEuler(new THREE.Euler(degToRad(-90), 0, 0)));
         break;
-        case "ArrowDown":
+        case props.Keybinds.CAMERA_ROTATE_DOWN.code:
         Rotate(new THREE.Quaternion().setFromEuler(new THREE.Euler(degToRad(90), 0, 0)),);
         break;
-        case "ArrowRight":
+        case props.Keybinds.CAMERA_ROTATE_RIGHT.code:
         Rotate(new THREE.Quaternion().setFromEuler(new THREE.Euler(0, degToRad(90), 0)));
         break;
-        case "ArrowLeft":
+        case props.Keybinds.CAMERA_ROTATE_LEFT.code:
         Rotate(new THREE.Quaternion().setFromEuler(new THREE.Euler(0, degToRad(-90), 0)));
         break;
       }
@@ -103,7 +96,7 @@ function Camera(props: CameraProps) {
     return () => {
       window.removeEventListener('keydown', onKeyPress);
     }
-  }, [rotation, setRotation, props.CAM_WAIT_FOR_ROTATE]);
+  }, [rotation, setRotation, props.Keybinds]);
 
   React.useEffect(() => {
     if (!rotation.rotating){
